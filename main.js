@@ -48,7 +48,7 @@ function checkInRange(min, max, str) {
 }
 
 function getFloatStr(str) {
-    var num = Math.round(Number.parseFloat(str) * 100) / 100
+    var num = Math.round(Number.parseFloat(str) * 10) / 10
 
     if(num > 0) return "+ " + num;
     return "- " + (-num)
@@ -96,9 +96,9 @@ function drawCanvas() {
 
 drawCanvas()
 
-const promptText = "Enter a number between -25 and 25: "
-const min = -25;
-const max = 25;
+const promptText = "Enter a number between -10 and 10: "
+const min = -10;
+const max = 10;
 items[0].addEventListener('dblclick', (e) => {
     let value = prompt(promptText);
 
@@ -106,7 +106,7 @@ items[0].addEventListener('dblclick', (e) => {
         // User cancelled the prompt
     } else {
         if(checkInRange(min, max, value)){
-            items[0].innerText = getFloatStr(value) + 'x²'
+            asrc.innerText = getFloatStr(value) + 'x²'
         }
     }
 })
@@ -118,7 +118,7 @@ items[1].addEventListener('dblclick', (e) => {
         // User cancelled the prompt
     } else {
         if(checkInRange(min, max, value)){
-            items[1].innerText = getFloatStr(value) + 'x'
+            bsrc.innerText = getFloatStr(value) + 'x'
         }
     }
 })
@@ -130,7 +130,7 @@ items[2].addEventListener('dblclick', (e) => {
         // User cancelled the prompt
     } else {
         if(checkInRange(min, max, value)){
-            items[2].innerText = getFloatStr(value) 
+            csrc.innerText = getFloatStr(value) 
         }
     }
 })
@@ -170,3 +170,126 @@ document.addEventListener('mouseup', () => {
     pickedup = undefined;
     pickedupcopy = undefined;
 });
+
+
+
+// PHONE SUPPORT
+items[0].addEventListener("touchstart", tapHandler0);
+items[1].addEventListener("touchstart", tapHandler1);
+items[2].addEventListener("touchstart", tapHandler2);
+
+var tapedTwice0 = false;
+function tapHandler0(event) {
+    if(!tapedTwice0) {
+        tapedTwice0 = true;
+        setTimeout( function() { tapedTwice0 = false; }, 300 );
+        return false;
+    }
+    event.preventDefault();
+
+    let value = prompt(promptText);
+
+    if (value == null || value == "") {
+        // User cancelled the prompt
+    } else {
+        if(checkInRange(min, max, value)){
+            asrc.innerText = getFloatStr(value) + 'x²'
+        }
+    }
+}
+ 
+
+var tapedTwice1 = false;
+function tapHandler1(event) {
+    if(!tapedTwice1) {
+        tapedTwice1 = true;
+        setTimeout( function() { tapedTwice1 = false; }, 300 );
+        return false;
+    }
+    event.preventDefault();
+
+    let value = prompt(promptText);
+
+    if (value == null || value == "") {
+        // User cancelled the prompt
+    } else {
+        if(checkInRange(min, max, value)){
+            bsrc.innerText = getFloatStr(value) + 'x'
+        }
+    }
+
+}
+
+var tapedTwice2 = false;
+function tapHandler2(event) {
+    if(!tapedTwice2) {
+        tapedTwice2 = true;
+        setTimeout( function() { tapedTwice2 = false; }, 300 );
+        return false;
+    }
+    event.preventDefault();
+
+    let value = prompt(promptText);
+
+    if (value == null || value == "") {
+        // User cancelled the prompt
+    } else {
+        if(checkInRange(min, max, value)){
+            csrc.innerText = getFloatStr(value) 
+        }
+    }
+}
+
+items[0].addEventListener('touchmove', function(e) {
+    var pickedup = asrc;
+    const itemindex = getItemIndex(pickedup)
+
+    var touchpos = e.targetTouches[0];
+
+    var uppercenter = getCenterPos(items.item(itemindex + 1))
+    var lowercenter = getCenterPos(items.item(itemindex - 1))
+
+    if(touchpos.pageX > uppercenter){
+        console.log(`${touchpos.pageX} > ${uppercenter}`);
+        list.insertBefore(pickedup, items.item(itemindex + 2));
+    }else if(touchpos.pageX < lowercenter) {
+        console.log(`${touchpos.pageX} < ${lowercenter}`);
+        list.insertBefore(pickedup, items.item(itemindex - 1));
+    }
+})
+
+items[1].addEventListener('touchmove', function(e) {
+    var pickedup = bsrc;
+    const itemindex = getItemIndex(pickedup)
+
+    var touchpos = e.targetTouches[0];
+
+    var uppercenter = getCenterPos(items.item(itemindex + 1))
+    var lowercenter = getCenterPos(items.item(itemindex - 1))
+
+    if(touchpos.pageX > uppercenter){
+        console.log(`${touchpos.pageX} > ${uppercenter}`);
+        list.insertBefore(pickedup, items.item(itemindex + 2));
+    }else if(touchpos.pageX < lowercenter) {
+        console.log(`${touchpos.pageX} < ${lowercenter}`);
+        list.insertBefore(pickedup, items.item(itemindex - 1));
+    }
+})
+
+items[2].addEventListener('touchmove', function(e) {
+    var pickedup = csrc;
+    const itemindex = getItemIndex(pickedup)
+
+    var touchpos = e.targetTouches[0];
+    
+    var uppercenter = getCenterPos(items.item(itemindex + 1))
+    var lowercenter = getCenterPos(items.item(itemindex - 1))
+
+    if(touchpos.pageX > uppercenter){
+        console.log(`${touchpos.pageX} > ${uppercenter}`);
+        list.insertBefore(pickedup, items.item(itemindex + 2));
+    }else if(touchpos.pageX < lowercenter) {
+        console.log(`${touchpos.pageX} < ${lowercenter}`);
+        list.insertBefore(pickedup, items.item(itemindex - 1));
+    }
+})
