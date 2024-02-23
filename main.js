@@ -165,20 +165,15 @@ list.addEventListener('dragend', (e) => {
     drawCanvas();
 });
 
-// Reset the pickedup item when its let down
-document.addEventListener('mouseup', () => {
-    pickedup = undefined;
-    pickedupcopy = undefined;
-});
-
-
-
 // PHONE SUPPORT
 items[0].addEventListener("touchstart", tapHandler0);
 items[1].addEventListener("touchstart", tapHandler1);
 items[2].addEventListener("touchstart", tapHandler2);
 
 var tapedTwice0 = false;
+var tapedTwice1 = false;
+var tapedTwice2 = false;
+
 function tapHandler0(event) {
     if(!tapedTwice0) {
         tapedTwice0 = true;
@@ -240,45 +235,29 @@ function tapHandler2(event) {
     }
 }
 
-items[0].addEventListener('touchmove', function(e) {
-    var pickedup = asrc;
-    const itemindex = getItemIndex(pickedup)
+items[0].addEventListener('touchstart', () => { onTouchStart(asrc) })
+items[1].addEventListener('touchstart', () => { onTouchStart(bsrc) })
+items[2].addEventListener('touchstart', () => { onTouchStart(csrc) })
 
-    var touchpos = e.targetTouches[0];
+items[0].addEventListener('touchmove', (e) => { onTouchMove(e, asrc) });
+items[1].addEventListener('touchmove', (e) => { onTouchMove(e, bsrc) });
+items[2].addEventListener('touchmove', (e) => { onTouchMove(e, csrc) });
 
-    var uppercenter = getCenterPos(items.item(itemindex + 1))
-    var lowercenter = getCenterPos(items.item(itemindex - 1))
+items[0].addEventListener('touchend', () => { onTounchEnd(asrc) })
+items[1].addEventListener('touchend', () => { onTounchEnd(bsrc) })
+items[2].addEventListener('touchend', () => { onTounchEnd(csrc) })
 
-    if(touchpos.pageX > uppercenter){
-        console.log(`${touchpos.pageX} > ${uppercenter}`);
-        list.insertBefore(pickedup, items.item(itemindex + 2));
-    }else if(touchpos.pageX < lowercenter) {
-        console.log(`${touchpos.pageX} < ${lowercenter}`);
-        list.insertBefore(pickedup, items.item(itemindex - 1));
-    }
-})
+items[0].addEventListener('touchcancel', () => { onTounchEnd(asrc) })
+items[1].addEventListener('touchcancel', () => { onTounchEnd(bsrc) })
+items[2].addEventListener('touchcancel', () => { onTounchEnd(csrc) })
 
-items[1].addEventListener('touchmove', function(e) {
-    var pickedup = bsrc;
-    const itemindex = getItemIndex(pickedup)
+function onTouchStart(sender) {
+    sender.style.visibility = 'visible'
+}
 
-    var touchpos = e.targetTouches[0];
-
-    var uppercenter = getCenterPos(items.item(itemindex + 1))
-    var lowercenter = getCenterPos(items.item(itemindex - 1))
-
-    if(touchpos.pageX > uppercenter){
-        console.log(`${touchpos.pageX} > ${uppercenter}`);
-        list.insertBefore(pickedup, items.item(itemindex + 2));
-    }else if(touchpos.pageX < lowercenter) {
-        console.log(`${touchpos.pageX} < ${lowercenter}`);
-        list.insertBefore(pickedup, items.item(itemindex - 1));
-    }
-})
-
-items[2].addEventListener('touchmove', function(e) {
-    var pickedup = csrc;
-    const itemindex = getItemIndex(pickedup)
+function onTouchMove(e, sender) {
+    sender.style.visibility = 'visible' 
+    const itemindex = getItemIndex(sender)
 
     var touchpos = e.targetTouches[0];
     
@@ -286,10 +265,14 @@ items[2].addEventListener('touchmove', function(e) {
     var lowercenter = getCenterPos(items.item(itemindex - 1))
 
     if(touchpos.pageX > uppercenter){
-        console.log(`${touchpos.pageX} > ${uppercenter}`);
-        list.insertBefore(pickedup, items.item(itemindex + 2));
+        list.insertBefore(sender, items.item(itemindex + 2));
     }else if(touchpos.pageX < lowercenter) {
-        console.log(`${touchpos.pageX} < ${lowercenter}`);
-        list.insertBefore(pickedup, items.item(itemindex - 1));
+        list.insertBefore(sender, items.item(itemindex - 1));
     }
-})
+    
+    drawCanvas();
+}
+
+function onTounchEnd(sender) {
+    sender.style.visibility = 'visible'
+}
